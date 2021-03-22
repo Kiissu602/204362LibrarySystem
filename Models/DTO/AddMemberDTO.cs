@@ -8,7 +8,7 @@ namespace _204362LibrarySystem.Models.DTO
 {
     public class AddMemberDTO
     {
-        public IFormFile Img { get; set; }
+        public IFormFile Image { get; set; }
         public string MemberID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -17,7 +17,7 @@ namespace _204362LibrarySystem.Models.DTO
         public string Phone { get; set; }
         public int Faculty { get; set; }
         public int Department { get; set; }
-        public int Type { get; set; }
+        public int Job { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }

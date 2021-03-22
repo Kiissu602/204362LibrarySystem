@@ -28,6 +28,7 @@ namespace _204362LibrarySystem.Models
         public DateTime BirthDate { get; set; }
 
         [Required]
+        [Column(TypeName = "nchar(10)")]
         public string Sex { get; set; }
 
         [Required]
@@ -41,7 +42,7 @@ namespace _204362LibrarySystem.Models
         public Department Department { get; set; }
 
         [Required]
-        public Type Type { get; set; }
+        public Job Job { get; set; }
 
         [Required]
         [Column(TypeName = "varchar(896)")]
@@ -63,8 +64,8 @@ namespace _204362LibrarySystem.Models
         public string Phone { get; set; }
         public Faculty Faculty { get; set; }
         public Department Department { get; set; }
-        public EnumType Type { get; set; }
+        public Job Job { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

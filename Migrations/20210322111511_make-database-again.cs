@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace _204362LibrarySystem.Migrations
 {
-    public partial class firstmigrate : Migration
+    public partial class makedatabaseagain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,17 +21,17 @@ namespace _204362LibrarySystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Type",
+                name: "Job",
                 columns: table => new
                 {
-                    TypeID = table.Column<int>(nullable: false)
+                    JobID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TypeName = table.Column<string>(type: "char(10)", nullable: false)
+                    JobName = table.Column<string>(type: "char(10)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Type", x => x.TypeID);
-                    table.UniqueConstraint("AK_Type_TypeName", x => x.TypeName);
+                    table.PrimaryKey("PK_Job", x => x.JobID);
+                    table.UniqueConstraint("AK_Job_JobName", x => x.JobName);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,7 +67,7 @@ namespace _204362LibrarySystem.Migrations
                     Phone = table.Column<string>(type: "char(10)", nullable: false),
                     FacultyID = table.Column<int>(nullable: false),
                     DepartmentID = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
+                    JobID = table.Column<int>(nullable: false),
                     Email = table.Column<string>(type: "varchar(896)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(64)", nullable: false)
                 },
@@ -85,6 +85,12 @@ namespace _204362LibrarySystem.Migrations
                         column: x => x.FacultyID,
                         principalTable: "Faculty",
                         principalColumn: "FacultyID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Member_Job_JobID",
+                        column: x => x.JobID,
+                        principalTable: "Job",
+                        principalColumn: "JobID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -108,6 +114,11 @@ namespace _204362LibrarySystem.Migrations
                 name: "IX_Member_FacultyID",
                 table: "Member",
                 column: "FacultyID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Member_JobID",
+                table: "Member",
+                column: "JobID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -116,10 +127,10 @@ namespace _204362LibrarySystem.Migrations
                 name: "Member");
 
             migrationBuilder.DropTable(
-                name: "Type");
+                name: "Department");
 
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "Job");
 
             migrationBuilder.DropTable(
                 name: "Faculty");

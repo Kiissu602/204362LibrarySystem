@@ -15,27 +15,27 @@ namespace _204362LibrarySystem.Models
         public DbSet<Member> Member { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<Faculty> Faculty { get; set; }
-        public DbSet<Type> Type { get; set; }
+        public DbSet<Job> Job { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Department>()
-             .HasOne(d => d.Faculty)
-             .WithMany(f => f.Departmentlist);
-
-            modelBuilder.Entity<Department>()
-                    .HasOne(d => d.Faculty)
-                    .WithMany(f => f.Departmentlist);
+             .HasOne(f => f.Faculty)
+             .WithMany(d => d.Departmentlist);
 
             modelBuilder.Entity<Member>()
-                  .HasOne(u => u.Department)
-                  .WithMany(d => d.MemberList);
+                  .HasOne(d => d.Department)
+                  .WithMany(m => m.MemberList);
+
+            modelBuilder.Entity<Member>()
+                  .HasOne(j => j.Job)
+                  .WithMany(m => m.MemberList);
 
             modelBuilder.Entity<Member>()
                     .HasIndex(u => u.Email)
                     .IsUnique();
 
-            modelBuilder.Entity<Type>()
-                    .HasAlternateKey(t => t.TypeName);
+            modelBuilder.Entity<Job>()
+                    .HasAlternateKey(t => t.JobName);
         }
 
         internal Member FirstOrDefault(Func<object, bool> p)

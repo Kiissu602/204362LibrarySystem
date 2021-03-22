@@ -10,8 +10,8 @@ using _204362LibrarySystem.Models;
 namespace _204362LibrarySystem.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210321160703_firstmigrate")]
-    partial class firstmigrate
+    [Migration("20210322150115_wtfdb")]
+    partial class wtfdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,24 @@ namespace _204362LibrarySystem.Migrations
                     b.ToTable("Faculty");
                 });
 
+            modelBuilder.Entity("_204362LibrarySystem.Models.Job", b =>
+                {
+                    b.Property<int>("JobID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("char(10)");
+
+                    b.HasKey("JobID");
+
+                    b.HasAlternateKey("JobName");
+
+                    b.ToTable("Job");
+                });
+
             modelBuilder.Entity("_204362LibrarySystem.Models.Member", b =>
                 {
                     b.Property<string>("MemberID")
@@ -81,6 +99,9 @@ namespace _204362LibrarySystem.Migrations
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("JobID")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -94,10 +115,7 @@ namespace _204362LibrarySystem.Migrations
 
                     b.Property<string>("Sex")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("nchar(10)");
 
                     b.HasKey("MemberID");
 
@@ -108,25 +126,9 @@ namespace _204362LibrarySystem.Migrations
 
                     b.HasIndex("FacultyID");
 
+                    b.HasIndex("JobID");
+
                     b.ToTable("Member");
-                });
-
-            modelBuilder.Entity("_204362LibrarySystem.Models.Type", b =>
-                {
-                    b.Property<int>("TypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("char(10)");
-
-                    b.HasKey("TypeID");
-
-                    b.HasAlternateKey("TypeName");
-
-                    b.ToTable("Type");
                 });
 
             modelBuilder.Entity("_204362LibrarySystem.Models.Department", b =>
@@ -147,6 +149,12 @@ namespace _204362LibrarySystem.Migrations
                     b.HasOne("_204362LibrarySystem.Models.Faculty", "Faculty")
                         .WithMany()
                         .HasForeignKey("FacultyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_204362LibrarySystem.Models.Job", "Job")
+                        .WithMany("MemberList")
+                        .HasForeignKey("JobID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
