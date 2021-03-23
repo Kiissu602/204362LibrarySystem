@@ -37,7 +37,7 @@ namespace _204362LibrarySystem
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                // options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore; 
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             }); ;
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));

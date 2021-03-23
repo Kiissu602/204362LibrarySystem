@@ -6,17 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20210322103208_type-fix.cs" />
-    <Compile Remove="Migrations\20210322103208_type-fix.Designer.cs" />
-    <Compile Remove="Migrations\20210322103434_type-fix.cs" />
-    <Compile Remove="Migrations\20210322103434_type-fix.Designer.cs" />
-    <Compile Remove="Migrations\20210322110503_change-column-name-and-fix.cs" />
-    <Compile Remove="Migrations\20210322110503_change-column-name-and-fix.Designer.cs" />
-    <Compile Remove="Migrations\20210322111022_updatename.cs" />
-    <Compile Remove="Migrations\20210322111022_updatename.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 

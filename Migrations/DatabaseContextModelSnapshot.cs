@@ -19,6 +19,79 @@ namespace _204362LibrarySystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("_204362LibrarySystem.Models.Author", b =>
+                {
+                    b.Property<string>("ISBN")
+                        .HasColumnType("char(13)");
+
+                    b.Property<int>("WriterID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ISBN", "WriterID");
+
+                    b.HasIndex("WriterID");
+
+                    b.ToTable("Author");
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Book", b =>
+                {
+                    b.Property<string>("ISBN")
+                        .HasColumnType("char(13)");
+
+                    b.Property<string>("BookImgUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Edition")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Pagination")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Plot")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<string>("PublicationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PublisherID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ISBN");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("PublisherID");
+
+                    b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("_204362LibrarySystem.Models.Department", b =>
                 {
                     b.Property<int>("DepartmentID")
@@ -127,6 +200,66 @@ namespace _204362LibrarySystem.Migrations
                     b.HasIndex("JobID");
 
                     b.ToTable("Member");
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Publisher", b =>
+                {
+                    b.Property<int>("PublisherID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("PublisherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PublisherID");
+
+                    b.ToTable("Publisher");
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Writer", b =>
+                {
+                    b.Property<int>("WriterID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("WriterName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WriterID");
+
+                    b.ToTable("Writer");
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Author", b =>
+                {
+                    b.HasOne("_204362LibrarySystem.Models.Book", "Book")
+                        .WithMany("Authorlist")
+                        .HasForeignKey("ISBN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_204362LibrarySystem.Models.Writer", "Writer")
+                        .WithMany("Authorlist")
+                        .HasForeignKey("WriterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Book", b =>
+                {
+                    b.HasOne("_204362LibrarySystem.Models.Category", "Category")
+                        .WithMany("Booklist")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_204362LibrarySystem.Models.Publisher", "Publisher")
+                        .WithMany("Booklist")
+                        .HasForeignKey("PublisherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("_204362LibrarySystem.Models.Department", b =>

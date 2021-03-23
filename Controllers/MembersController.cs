@@ -42,7 +42,8 @@ namespace _204362LibrarySystem.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Member>> GetMember(string id)
         {
-            var member = await _context.Member.FindAsync(id);
+            var member = await _context.Member.Include(m => m.Department).Include(m => m.Faculty).Include(m =>m.Job)
+                .FirstOrDefaultAsync(m=> m.MemberID == id);
 
             if (member == null)
             {
@@ -97,7 +98,7 @@ namespace _204362LibrarySystem.Controllers
             var entry = _context.Entry(Member);
             entry.State = EntityState.Modified;
             entry.Property(m => m.ImgUrl).IsModified = member.Image != null;
-            
+            entry.Property(m => m.Password).IsModified = member.Password != null;
 
             await _context.SaveChangesAsync();
             return NoContent();
