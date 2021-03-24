@@ -20,6 +20,10 @@ namespace _204362LibrarySystem.Models
         public DbSet<Author> Author { get; set; }
         public DbSet<Publisher> Publisher { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<BBR> BBR { get; set; }
+        public DbSet<Rule> Rule { get; set; }
+        public DbSet<CheckMember> CheckMember { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +62,20 @@ namespace _204362LibrarySystem.Models
                     .HasOne(a => a.Writer)
                     .WithMany(b => b.Authorlist)
                     .HasForeignKey(a => a.WriterID);
+
+            modelBuilder.Entity<Job>()
+                    .HasOne(j => j.Rule)
+                    .WithMany(r => r.Job);
+
+            modelBuilder.Entity<BBR>()
+                    .HasOne(b => b.Member)
+                    .WithMany(m => m.BBRlist)
+                    .HasForeignKey(b => b.MemberID);
+
+            modelBuilder.Entity<BBR>()
+                   .HasOne(b => b.Book)
+                   .WithMany(m => m.BBRlist)
+                   .HasForeignKey(b => b.ISBN);
         }
     }
     

@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace _204362LibrarySystem.Models
 {
-    public class Job
+    public class CheckMember
     {
         [Key]
-        public int JobID { get; set; }
-
-        [Column(TypeName = "char(10)")]
-        public EnumType JobName { get; set; }
-
-        public Rule Rule { get; set; }
-
-        public ICollection<Member> MemberList { get; set; }
+        public string CheckMemberID { get; set; }
+        [Column(TypeName = "char(9)")]
+        public string MemberID { get; set; }
+        public Member Member { get; set; }
+        public EnumType CheckStatus { get; set; }
     }
 }

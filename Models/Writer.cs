@@ -12,6 +12,7 @@ namespace _204362LibrarySystem.Models
         [Key]
         public int WriterID { get; set; }
 
+        [Required]
         [Column(TypeName = "nvarchar(max)")]
         public string WriterName { get; set; }
 

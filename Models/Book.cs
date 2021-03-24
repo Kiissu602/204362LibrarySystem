@@ -40,5 +40,7 @@ namespace _204362LibrarySystem.Models
         public string Plot { get; set; }
 
         public ICollection<Author> Authorlist { get; set; }
+
+        public ICollection<BBR> BBRlist { get; set; }
     }
 }

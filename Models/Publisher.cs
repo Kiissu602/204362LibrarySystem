@@ -12,7 +12,7 @@ namespace _204362LibrarySystem.Models
         public int PublisherID { get; set; }
 
         public string PublisherName { get; set; }
-
+        
         public ICollection<Book> Booklist { get; set; }
     }
 }

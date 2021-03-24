@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210324110214_CreateAllTable.cs" />
+    <Compile Remove="Migrations\20210324110214_CreateAllTable.Designer.cs" />
+    <Compile Remove="Migrations\20210324110819_CreateAllTable.cs" />
+    <Compile Remove="Migrations\20210324110819_CreateAllTable.Designer.cs" />
+    <Compile Remove="Migrations\20210324111156_CreateAllTable.cs" />
+    <Compile Remove="Migrations\20210324111156_CreateAllTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 

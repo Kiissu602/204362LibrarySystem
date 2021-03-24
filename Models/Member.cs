@@ -51,6 +51,8 @@ namespace _204362LibrarySystem.Models
         [Required]
         [Column(TypeName = "nvarchar(64)")]
         public string Password { get; set; }
+
+        public ICollection<BBR> BBRlist { get; set; }
     }
 
     public class MemberReturnDTO
