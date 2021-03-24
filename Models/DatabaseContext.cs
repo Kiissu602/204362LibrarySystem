@@ -65,7 +65,7 @@ namespace _204362LibrarySystem.Models
 
             modelBuilder.Entity<Job>()
                     .HasOne(j => j.Rule)
-                    .WithMany(r => r.Job);
+                    .WithMany(r => r.Joblist);
 
             modelBuilder.Entity<BBR>()
                     .HasOne(b => b.Member)

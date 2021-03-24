@@ -40,15 +40,20 @@ namespace _204362LibrarySystem.Controllers
 
         // GET: api/Members/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Member>> GetMember(string id)
+        public async Task<MemberFormDTO> GetMember(string id)
         {
-            var member = await _context.Member.Include(m => m.Department).Include(m => m.Faculty).Include(m =>m.Job)
-                .FirstOrDefaultAsync(m=> m.MemberID == id);
-
-            if (member == null)
-            {
-                return NotFound();
-            }
+            var member = await _context.Member.Select(m => new MemberFormDTO 
+                {
+                MemberID = m.MemberID,
+                FirstName = m.FirstName,
+                LastName = m.LastName,
+                BirthDate = m.BirthDate,
+                Sex = m.Sex,
+                Phone = m.Phone,
+                FacultyName = m.Faculty.FacultyName,
+                DepartmentName = m.Department.DepartmentName,
+                Email = m.Email,
+            }).FirstOrDefaultAsync(m=> m.MemberID == id);
 
             return member;
         }
@@ -104,9 +109,7 @@ namespace _204362LibrarySystem.Controllers
             return NoContent();
         }
 
-        // PUT: api/Members/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMember(string id, Member member)
         {
@@ -136,9 +139,6 @@ namespace _204362LibrarySystem.Controllers
             return NoContent();
         }
 
-        // POST: api/Members
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember([FromForm] AddMemberDTO member)
         {
@@ -215,7 +215,6 @@ namespace _204362LibrarySystem.Controllers
             return memberReturn;
         }
 
-        // DELETE: api/Members/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Member>> DeleteMember(string id)
         {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _204362LibrarySystem.Models;
 
 namespace _204362LibrarySystem.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210324122606_fixJobRule")]
+    partial class fixJobRule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,6 +296,12 @@ namespace _204362LibrarySystem.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
+                    b.Property<TimeSpan>("BookingTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("JobID")
+                        .HasColumnType("int");
+
                     b.Property<int>("LimitDayBooking")
                         .HasColumnType("int");
 
@@ -307,6 +315,8 @@ namespace _204362LibrarySystem.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("RuleID");
+
+                    b.HasIndex("JobID");
 
                     b.ToTable("Rule");
                 });
@@ -409,6 +419,15 @@ namespace _204362LibrarySystem.Migrations
 
                     b.HasOne("_204362LibrarySystem.Models.Job", "Job")
                         .WithMany("MemberList")
+                        .HasForeignKey("JobID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("_204362LibrarySystem.Models.Rule", b =>
+                {
+                    b.HasOne("_204362LibrarySystem.Models.Job", "Job")
+                        .WithMany()
                         .HasForeignKey("JobID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
