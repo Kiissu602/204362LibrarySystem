@@ -1,4 +1,5 @@
 using _204362LibrarySystem.Models;
+using _204362LibrarySystem.Services;
 using LibrarySystem.Services;
 using LibrarySystem.Setting;
 using LibrarySystem.Settings;
@@ -86,6 +87,11 @@ namespace _204362LibrarySystem
                 };
             });
             services.AddSingleton<ImageService>();
+            services.AddTransient<BookService>();
+            services.AddTransient<MemberService>();
+            services.AddTransient<WriterService>();
+            services.AddTransient<AuthorService>();
+            services.AddTransient<PublisherService>();
             services.AddControllers();
         }
 

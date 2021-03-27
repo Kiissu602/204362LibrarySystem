@@ -34,6 +34,7 @@ namespace _204362LibrarySystem.Controllers
                 LimitDayBooking = j.Rule.LimitDayBooking,
                 LostFines =j.Rule.LostFines,
                 ReturnFines = j.Rule.ReturnFines,
+                GetBook = j.Rule.GetBook,
                 }).ToListAsync();
 
             return JobRule;

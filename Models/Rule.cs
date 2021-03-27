@@ -15,6 +15,9 @@ namespace _204362LibrarySystem.Models
         public int Amount { get; set; }
 
         [Required]
+        public int GetBook { get; set; }
+
+        [Required]
         public int LimitDayBorrow { get; set; }
 
         [Required]

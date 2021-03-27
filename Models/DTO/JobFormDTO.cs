@@ -15,5 +15,6 @@ namespace _204362LibrarySystem.Models.DTO
         public int LimitDayBooking { get; set; }
         public int ReturnFines { get; set; }
         public int LostFines { get; set; }
+        public int GetBook { get; set; }
     }
 }

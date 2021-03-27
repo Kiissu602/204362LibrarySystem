@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _204362LibrarySystem.Models;
 
 namespace _204362LibrarySystem.Models
 {
@@ -23,8 +24,7 @@ namespace _204362LibrarySystem.Models
         public DbSet<BBR> BBR { get; set; }
         public DbSet<Rule> Rule { get; set; }
         public DbSet<CheckMember> CheckMember { get; set; }
-
-
+        public DbSet<Writer> Writer { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Department>()
@@ -76,7 +76,10 @@ namespace _204362LibrarySystem.Models
                    .HasOne(b => b.Book)
                    .WithMany(m => m.BBRlist)
                    .HasForeignKey(b => b.ISBN);
+
+            modelBuilder.Entity<Writer>()
+                   .Property(w => w.WriterID)
+                   .ValueGeneratedOnAdd();
         }
     }
-    
 }

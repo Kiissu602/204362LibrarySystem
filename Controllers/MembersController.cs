@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using _204362LibrarySystem.Services;
 
 namespace _204362LibrarySystem.Controllers
 {
@@ -20,15 +21,15 @@ namespace _204362LibrarySystem.Controllers
     [ApiController]
     public class MembersController : ControllerBase
     {
-        private const bool V = true;
+        
         private readonly DatabaseContext _context;
-        private readonly ImageService _imageService;
         private readonly IMemberSettings _memberSettings;
-        public MembersController(DatabaseContext context, IMemberSettings memberSettings, ImageService imageService)
+        private readonly MemberService _memberService;
+        public MembersController(DatabaseContext context, IMemberSettings memberSettings,MemberService memberService)
         {
             _context = context;
-            _imageService = imageService;
             _memberSettings = memberSettings;
+            _memberService = memberService;
         }
 
         // GET: api/Members
@@ -68,38 +69,7 @@ namespace _204362LibrarySystem.Controllers
                 return Unauthorized();
             }
 
-            var dep = new Department() { DepartmentID = member.Department };
-            _context.Attach(dep);
-            var fac = new Faculty() { FacultyID = member.Faculty };
-            _context.Attach(fac);
-
-            var job = new Job() { JobID = member.Job };
-            _context.Attach(job);
-            string Img;
-            if (member.Image != null)
-            { 
-                 Img = _imageService.SaveImg(member.Image); 
-            }
-            else
-            {
-                 Img = " ";
-            }
-
-            var Member = new Member()
-            {
-                ImgUrl = Img,
-                MemberID = member.MemberID,
-                FirstName = member.FirstName,
-                LastName = member.LastName,
-                BirthDate = member.BirthDate,
-                Sex = member.Sex,
-                Phone = member.Phone,
-                Faculty = fac,
-                Department = dep,
-                Job = job,
-                Email = member.Email,
-                Password = member.Password,
-            };
+            Member Member = _memberService.Put(member);
             var entry = _context.Entry(Member);
             entry.State = EntityState.Modified;
             entry.Property(m => m.ImgUrl).IsModified = member.Image != null;
@@ -142,33 +112,24 @@ namespace _204362LibrarySystem.Controllers
         [HttpPost]
         public async Task<ActionResult<Member>> PostMember([FromForm] AddMemberDTO member)
         {
-            var dep = new Department() { DepartmentID = member.Department };
-            _context.Attach(dep);
-            var fac = new Faculty() { FacultyID = member.Faculty };
-            _context.Attach(fac);
-            var job = new Job() { JobID = member.Job };
-            _context.Attach(job);
-            string Img = _imageService.SaveImg(member.Image);
 
-            var newMember = new Member()
-            {
-                ImgUrl = Img,
-                MemberID = member.MemberID,
-                FirstName = member.FirstName,
-                LastName = member.LastName,
-                BirthDate = member.BirthDate,
-                Sex = member.Sex,
-                Phone = member.Phone,
-                Faculty = fac,
-                Department = dep,
-                Job = job,
-                Email = member.Email,
-                Password = member.Password,
-  
-            };
-
+            Member newMember = _memberService.Post(member);
             _context.Member.Add(newMember);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (MemberExists(member.MemberID))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
             return CreatedAtAction("GetMember", new { id = member.MemberID }, newMember);
         }
 
