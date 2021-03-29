@@ -34,7 +34,7 @@ namespace _204362LibrarySystem.Controllers
             _authorService = authorService;
         }
 
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
@@ -57,7 +57,7 @@ namespace _204362LibrarySystem.Controllers
                 Pagination = b.Pagination,
                 Price = b.Price,
                 Plot = b.Plot,
-                Writer = b.Authorlist.Select(a => a.Writer.WriterName ).ToList(),
+                Writer = b.Authorlist.Select(a => a.Writer.WriterName).ToList(),
             }).FirstOrDefaultAsync(b => b.ISBN == id);
 
             if (book == null)
@@ -67,36 +67,74 @@ namespace _204362LibrarySystem.Controllers
 
             return book;
         }
+        [HttpGet("up/{id}")]
+        public async Task<BookFormUpdateDTO> GetBookToUpdate(string id)
+        {
+            var book = await _context.Book.Select(b => new BookFormUpdateDTO
+            {
+                Image = b.BookImgUrl,
+                ISBN = b.ISBN,
+                Title = b.Title,
+                PublisherID = b.Publisher.PublisherID,
+                PublisherName = b.Publisher.PublisherName,
+                PublicationDate = b.PublicationDate,
+                Category = b.Category.CategoryID,
+                Edition = b.Edition,
+                Pagination = b.Pagination,
+                Price = b.Price,
+                Plot = b.Plot,
+                WriterID = b.Authorlist.Select(a => a.Writer.WriterID).ToList(),
+                WriterName = b.Authorlist.Select(a => a.Writer.WriterName).ToList(),
+            }).FirstOrDefaultAsync(b => b.ISBN == id);
 
+            if (book == null)
+            {
+                return null;
+            }
+
+            return book;
+        }
         // PUT: api/Books/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(string id, Book book)
+        public async Task<IActionResult> PutBook([FromForm]UpdateBookDTO book)
         {
-            if (id != book.ISBN)
-            {
-                return BadRequest();
-            }
+                
+            var publisher = _publisherService.Post(book.PublisherName);
 
-            _context.Entry(book).State = EntityState.Modified;
-
-            try
+            if (publisher != null)
             {
-                await _context.SaveChangesAsync();
+                _context.Publisher.Add(publisher);
             }
-            catch (DbUpdateConcurrencyException)
+            await _context.SaveChangesAsync();
+            Book newBook = _bookService.Put(book);
+
+            var entry = _context.Entry(newBook);
+            entry.State = EntityState.Modified;
+            entry.Property(b => b.BookImgUrl).IsModified = book.Image != null;
+            entry.Reference(b => b.Publisher).IsModified = publisher != null;
+
+            string[] writers = book.WriterName.Split(',');
+
+            for (int i = 0; i < writers.Length; i++)
             {
-                if (!BookExists(id))
+                if (i >= writers.Length)
                 {
-                    return NotFound();
+                    var writer = new Writer { WriterName = writers[i].Trim() };
+                    _context.Writer.Add(writer);
+                    var newAuthor = new Author { Book = newBook, Writer = writer };
+                    _context.Author.Add(newAuthor);
                 }
-                else
+                else if (_context.Writer.Any(e => e.WriterName != writers[i].Trim() && e.WriterID == book.WriterID.ElementAt(i)))
                 {
-                    throw;
+                    Writer writer = new Writer { WriterID = book.WriterID.ElementAt(i), WriterName = writers[i] };
+                    _context.Entry(writer).State = EntityState.Modified;
                 }
+                
             }
 
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
