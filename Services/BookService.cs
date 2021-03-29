@@ -24,9 +24,10 @@ namespace _204362LibrarySystem.Services
             var publisher = new Publisher { PublisherName = book.PublisherName };
             _context.Attach(publisher);
             var category = new Category { CategoryID = book.CategoryID };
-            _context.Attach(category);
+            _context.Attach(category); 
             string Img = _imageService.SaveImg(book.Image);
-
+           
+            
             var newBook = new Book
             {
                 BookImgUrl = Img,
@@ -43,5 +44,37 @@ namespace _204362LibrarySystem.Services
 
             return newBook;
         }
+        public Book Put([FromForm] UpdateBookDTO book)
+        {
+            var publisher = new Publisher { PublisherName = book.PublisherName };
+            _context.Attach(publisher);
+            var category = new Category { CategoryID = book.Category };
+            _context.Attach(category);
+            string Img;
+            if (book.Image != null)
+            {
+                Img = _imageService.SaveImg(book.Image);
+            }
+            else
+            {
+                Img = " ";
+            }
+            var newBook = new Book
+            {
+                BookImgUrl = Img,
+                ISBN = book.ISBN,
+                Title = book.Title,
+                Category = category,
+                Publisher = publisher,
+                PublicationDate = book.PublicationDate,
+                Edition = book.Edition,
+                Pagination = book.Pagination,
+                Price = book.Price,
+                Plot = book.Plot,
+            };
+
+            return newBook;
+        }
+
     }
 }

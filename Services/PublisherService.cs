@@ -24,6 +24,16 @@ namespace _204362LibrarySystem.Services
             return newPublisher;
         }
 
+        public Publisher Put(string publisher)
+        {
+            if (PublisherExistsByName(publisher))
+            {
+                return null;
+            }
+            Publisher newPublisher = new Publisher { PublisherName = publisher };
+            return newPublisher;
+        }
+
         private bool PublisherExistsByName(string publisher)
         {
             return _context.Publisher.Any(e => e.PublisherName == publisher);

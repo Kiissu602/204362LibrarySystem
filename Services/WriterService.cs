@@ -31,9 +31,13 @@ namespace _204362LibrarySystem.Services
             return newWriters;
         }
 
+        
+
         private bool WriterExistsByName(string name)
         {
             return _context.Writer.Any(e => e.WriterName == name);
         }
+
+        
     }
 }

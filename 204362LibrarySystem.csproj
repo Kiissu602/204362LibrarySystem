@@ -6,15 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20210324110214_CreateAllTable.cs" />
-    <Compile Remove="Migrations\20210324110214_CreateAllTable.Designer.cs" />
-    <Compile Remove="Migrations\20210324110819_CreateAllTable.cs" />
-    <Compile Remove="Migrations\20210324110819_CreateAllTable.Designer.cs" />
-    <Compile Remove="Migrations\20210324111156_CreateAllTable.cs" />
-    <Compile Remove="Migrations\20210324111156_CreateAllTable.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.13" />
