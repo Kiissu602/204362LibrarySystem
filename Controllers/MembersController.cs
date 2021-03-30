@@ -14,6 +14,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using _204362LibrarySystem.Services;
+using _204362LibrarySystem.Enum;
 
 namespace _204362LibrarySystem.Controllers
 {
@@ -42,22 +43,22 @@ namespace _204362LibrarySystem.Controllers
         [HttpGet("Librarian")]
         public async Task<List<MemberListDTO>> GetMemberList([FromQuery] string MemberID, [FromQuery] string FirstName, [FromQuery] string LastName, [FromQuery] string Faculty, [FromQuery] string Department, [FromQuery] string a, [FromQuery] string b, [FromQuery] string c)
         {
-                var newMember = await _context.Member.Where(m => (MemberID == null || m.MemberID.Contains(MemberID))
-                               && (FirstName == null || m.FirstName.Contains(FirstName))
-                               && (LastName == null || m.LastName.Contains(LastName))
-                               && (Faculty == null || m.Faculty.FacultyID == int.Parse(Faculty))
-                               && (Department == null || m.Department.DepartmentID == int.Parse(Department))
-                               && (a == null || m.Sex.Contains(a)
-                               && b == null || m.Sex.Contains(b)
-                               && c == null || m.Sex.Contains(c))).Select(m => new MemberListDTO
-                               {
-                                   MemberID = m.MemberID,
-                                   FirstName = m.FirstName,
-                                   LastName = m.LastName,
-                                   DepartmentName = m.Department.DepartmentName,
-                                   FacultyName = m.Faculty.FacultyName
-                               }).ToListAsync();
-                return newMember;
+            var newMember = await _context.Member.Where(m => (MemberID == null || m.MemberID.Contains(MemberID))
+                && (FirstName == null || m.FirstName.Contains(FirstName))
+                && (LastName == null || m.LastName.Contains(LastName))
+                && (Faculty == null || m.Faculty.FacultyID == int.Parse(Faculty))
+                && (Department == null || m.Department.DepartmentID == int.Parse(Department))
+                && (a == null || m.Sex.Contains(a)
+                && b == null || m.Sex.Contains(b)
+                && c == null || m.Sex.Contains(c))).Select(m => new MemberListDTO
+                    {
+                    MemberID = m.MemberID,
+                    FirstName = m.FirstName,
+                    LastName = m.LastName,
+                    DepartmentName = m.Department.DepartmentName,
+                    FacultyName = m.Faculty.FacultyName
+                    }).ToListAsync();
+              return newMember;
         }
 
         // GET: api/Members/5
@@ -81,8 +82,8 @@ namespace _204362LibrarySystem.Controllers
             return member;
         }
 
-        [HttpGet("rule/{id}")]
-        public async Task<MemberRuleDTO> GetMemberRule(string id)
+        [HttpGet("rule")]
+        public async Task<MemberRuleDTO> GetMemberRule(ReturnMemDTO mem)
         {
             var member = await _context.Member.Select(m => new MemberRuleDTO
             {
@@ -91,10 +92,11 @@ namespace _204362LibrarySystem.Controllers
                 FirstName = m.FirstName,
                 LastName = m.LastName,
                 Amount = m.Job.Rule.Amount,
-            }).FirstOrDefaultAsync(m => m.MemberID == id);
+            }).FirstOrDefaultAsync(m => m.MemberID.Contains(mem.MemberID));
 
             return member;
         }
+      
         [HttpPut]
         public async Task<ActionResult<Member>> PutMember([FromForm] AddMemberDTO member)
         {

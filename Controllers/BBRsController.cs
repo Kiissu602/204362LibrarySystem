@@ -42,13 +42,13 @@ namespace _204362LibrarySystem.Controllers
 
             return bBR;
         }
-        [HttpGet("member/{id}")]
-        public async Task<List<BorrowListDTO>> GetBBRByMemberID(string id)
+        [HttpGet("member")]
+        public async Task<List<BorrowListDTO>> GetBBRByMemberID(ReturnMemDTO member)
         {
            
-            List<BorrowListDTO> bBR = await _context.BBR.Where(b => b.MemberID == id).Select(b => new BorrowListDTO { 
+            List<BorrowListDTO> bBR = await _context.BBR.Where(b => b.MemberID.Contains(member.MemberID)).Select(b => new BorrowListDTO { 
                 BorrowDate = b.BookingDate,
-                DueDate = b.BorrowDate.AddDays(b.Member.Job.Rule.LimitDayBorrow),
+                DueDate = (b.ReservePlace =="Library" ? b.BorrowDate.AddDays(b.Member.Job.Rule.LimitDayBorrow): b.BorrowDate.AddDays(b.Member.Job.Rule.LimitDayBooking)),
                 FirstName = b.Member.FirstName,
                 LastName = b.Member.LastName,
                 BookName = b.Book.Title,
@@ -56,6 +56,7 @@ namespace _204362LibrarySystem.Controllers
 
             return bBR;
         }
+        
 
         // PUT: api/BBRs/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -96,15 +97,9 @@ namespace _204362LibrarySystem.Controllers
         public async Task<ActionResult<BorrowListDTO>> PostBBR(AddBorrowDTO bbr)
         {
             Member member = await _context.Member.Include(m => m.Job.Rule).FirstOrDefaultAsync(m => m.MemberID == bbr.MemberID);
-            if(member == null)
-            {
-                return BadRequest(new { msg = "MemberDoesNotExits" });
-            }
+            
             Book book = await _context.Book.FirstOrDefaultAsync(b => b.ISBN == bbr.ISBN);
-            if(book == null)
-            {
-                return BadRequest(new { msg = "BookDoesNotExits" });
-            }
+            
             
             var count = _context.BBR.Count(b => b.MemberID == member.MemberID && (b.Status == EnumType.Borrowing || b.Status == EnumType.Booking));
             
