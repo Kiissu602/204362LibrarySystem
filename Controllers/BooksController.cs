@@ -94,6 +94,35 @@ namespace _204362LibrarySystem.Controllers
 
             return book;
         }
+
+        [HttpGet("bydata")]
+        public async Task<List<BookFormDTO>> GetBookBydata([FromQuery]string ISBN, [FromQuery] string Writer, [FromQuery] string Publisher, [FromQuery] string Title)
+        {
+            var newBook = await _context.Book.Where(b => (ISBN == null || b.ISBN.Contains(ISBN))
+            && (Title == null || b.Title.Contains(Title))
+            && (Publisher == null || b.Publisher.PublisherName.Contains(Publisher))
+            && (Writer == null || b.Authorlist.Any(a => a.Writer.WriterName.Contains(Writer)))).Select(b => new BookFormDTO
+            {
+                Image = b.BookImgUrl,
+                ISBN = b.ISBN,
+                Title = b.Title,
+                PublisherName = b.Publisher.PublisherName,
+                PublicationDate = b.PublicationDate,
+                Category = b.Category.CategoryName,
+                Edition = b.Edition,
+                Pagination = b.Pagination,
+                Price = b.Price,
+                Plot = b.Plot,
+                Writer = b.Authorlist.Select(a => a.Writer.WriterName).ToList(),
+            }).ToListAsync();
+
+            if (newBook == null)
+            {
+                return null;
+            }
+
+            return newBook;
+        }
         // PUT: api/Books/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

@@ -7,6 +7,6 @@ namespace _204362LibrarySystem.Enum
 {
     public enum EnumType
     {
-        Student, Staff, Librarian, Borrowing, Wait, Returned, Late, Losted
+        Student, Staff, Librarian, Borrowing, Returned, Late, Losted, Booking
     }
 }
